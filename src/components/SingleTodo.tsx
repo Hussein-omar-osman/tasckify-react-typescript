@@ -1,36 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import { MdDone } from 'react-icons/md';
-import { Todo } from '../model';
+import { Action, Todo } from '../model';
 
 interface Props {
   todo: Todo;
   todos: Todo[];
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  disPatch: React.Dispatch<Action>;
 }
 
-const SingleTodo = ({ todo, todos, setTodos }: Props) => {
+const SingleTodo = ({ todo, todos, disPatch }: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [editTodo, setEditTodo] = useState<string>(todo.todo);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDone = (id: number) => {
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
-      )
-    );
+    disPatch({ type: 'done', payLoad: id });
   };
 
   const handleDelete = (id: number) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    disPatch({ type: 'remove', payLoad: id });
   };
 
   const handleSubmitEdit = (e: { preventDefault: () => void }, id: number) => {
     e.preventDefault();
-    setTodos((prev) =>
-      prev.map((todo) => (todo.id === id ? { ...todo, todo: editTodo } : todo))
-    );
+    disPatch({ type: 'edit', payLoad: { id: id, edit: editTodo } });
     setEdit(false);
   };
 
