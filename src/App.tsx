@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import InputField from './components/InputField';
 import { Todo } from './model';
@@ -17,6 +17,7 @@ function App() {
         ...prev,
         { id: Date.now(), todo: todo, isDone: false },
       ]);
+      setTodo('');
     }
   };
 
